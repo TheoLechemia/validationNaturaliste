@@ -40,7 +40,7 @@ compress.init_app(application)
 from Apps.validation.validationViews import validation
 
 
-application.register_blueprint(validation, url_prefix='/validation')
+application.register_blueprint(validation)
 
 
 

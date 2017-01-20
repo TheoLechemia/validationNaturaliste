@@ -170,7 +170,7 @@ $('.validate').click(function(){
 	data = JSON.stringify(data)
 	$.ajax({
 	  type: "POST",
-	  url: URL_APPLICATION+'/validation/validate',
+	  url: URL_APPLICATION+'/validate',
 	  contentType: 'application/json; charset=utf-8',
 	  data: data,
 	  dataType: "json"
@@ -187,7 +187,7 @@ $('.delete').click(function(){
 	$('#confirmDelete').click(function(){
 			$.ajax({
 			  type: "GET",
-			  url: URL_APPLICATION+"/validation/delete/"+id
+			  url: URL_APPLICATION+"/delete/"+id
 			})
 		$('.modal').modal('hide');
 		$(row).addClass("delete_ok");

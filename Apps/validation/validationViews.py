@@ -14,7 +14,7 @@ validation = Blueprint('validation', __name__, static_url_path="/validation", st
 @validation.route("/")
 def indexValidation():
     db = getConnexion()
-    sql = config.SQL
+    sql = config.LOAD_OBS
     res = utils.sqltoDict(sql, db.cur)
     nom_vern = None
     for r in res:
@@ -54,11 +54,7 @@ def validate():
             tupleSynth = tuple(tab)
         else:
             tupleSynth = tuple(id_synt)
-        print "OHHH"
-        print id_synt
-        sql = """UPDATE """+config.OBS_TABLE+"""
-                 SET valide = TRUE
-                 WHERE """+config.ID_OBSERVATION+""" IN %s;"""
+        sql = config.VALIDATE_OBS
         param = [tupleSynth]
         db.cur.execute(sql,param) 
         db.conn.commit()

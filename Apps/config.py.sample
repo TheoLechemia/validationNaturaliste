@@ -24,11 +24,16 @@ OBSERVATEUR_FIELD = 'observateur'
 PROTOCOLE_FIELD = 'protocole'
 VALIDE_FIELD = 'valide'
 
+## DATABASE REQUEST ### 
 
-SQL = """ SELECT f."""+config.ID_OBSERVATION+""" AS id_synthese, f."""+OBSERVATEUR_FIELD+""" AS observateur, f."""+PROTOCOLE_FIELD+""" AS PROTOCOLE, f.cd_nom, t.nom_vern, t.lb_nom, f.date, ST_AsGeoJSON(ST_TRANSFORM("""+config.GEOM_NAME+""", 4326)) AS geom
- FROM """+OBS_TABLE+""" f
- JOIN """+TAXREF_TABLE+""" t ON t.cd_nom = f.cd_nom
- WHERE f."""+VALIDE_FIELD+""" = FALSE """
+LOAD_OBS = """ SELECT f."""+ID_OBSERVATION+""" AS id_synthese, f."""+OBSERVATEUR_FIELD+""" AS observateur, f."""+PROTOCOLE_FIELD+""" AS protocole, f.cd_nom, t.nom_vern, t.lb_nom, f.date, ST_AsGeoJSON(ST_TRANSFORM("""+GEOM_NAME+""", 4326)) AS geom
+				FROM """+OBS_TABLE+""" f
+				JOIN """+TAXREF_TABLE+""" t ON t.cd_nom = f.cd_nom
+				WHERE f."""+VALIDE_FIELD+""" = FALSE """
+
+ DELETE_OBS = "DELETE FROM "+ OBS_TABLE +" WHERE +"ID_OBSERVATION"+ = %s; "
+
+ VALIDATE_OBS = "UPDATE "+OBS_TABLE+" SET valide = TRUE WHERE "+ID_OBSERVATION+" IN %s ;"
 
 
 
