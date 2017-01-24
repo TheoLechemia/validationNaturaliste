@@ -159,18 +159,20 @@ function deletePoint(arrayDelete){
 }
 
 
-$('.validate').click(function(){
-	row = this.parentElement;
+function validate(id, protocole, e){
+	console.log("validate");
+	console.log(id);
+	console.log(e)
+	row = e.parentElement;
+	console.log(row);
 	$(row).addClass("validate_ok")
 	$(row).removeClass('currentRow');
     $(row).hide( "slow" );
-    id = $(row).attr("idSynthese");
-	
-	data = {'validate': id}
+	data = {'validate': id, 'protocole': protocole}
 	data = JSON.stringify(data)
-	$.ajax({
+		$.ajax({
 	  type: "POST",
-	  url: URL_APPLICATION+'/validate',
+	  url: URL_APPLICATION+'validate',
 	  contentType: 'application/json; charset=utf-8',
 	  data: data,
 	  dataType: "json"
@@ -178,7 +180,7 @@ $('.validate').click(function(){
 	idArray = [];
 	idArray.push(id)
 	deletePoint(idArray);
-});
+	}
 
 var id;
 $('.delete').click(function(){
@@ -187,7 +189,7 @@ $('.delete').click(function(){
 	$('#confirmDelete').click(function(){
 			$.ajax({
 			  type: "GET",
-			  url: URL_APPLICATION+"/delete/"+id
+			  url: URL_APPLICATION+"delete/"+id
 			})
 		$('.modal').modal('hide');
 		$(row).addClass("delete_ok");
@@ -252,7 +254,7 @@ $('#globalValidate').click(function(){
 	jsonData = JSON.stringify(jsonData)
 	$.ajax({
 	  type: "POST",
-	  url: URL_APPLICATION+"/validation/validate",
+	  url: URL_APPLICATION+"validate",
 	  contentType: 'application/json; charset=utf-8',
 	  data: jsonData,
 	  dataType: "json"

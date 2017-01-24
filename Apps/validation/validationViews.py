@@ -43,20 +43,30 @@ def deleteRow(id_synt):
 
 @validation.route('/validate', methods=['GET', 'POST'])
 def validate():
+    print "OHHHH"
     db = getConnexion()
     #id_synt = str(id_synt)
     tab = list()
     id_synt = tuple()
     if request.method == 'POST':
         id_synt = request.json['validate']
+        protocole = request.json['protocole']
         if type(id_synt) != str:
             tab.append(id_synt)
             tupleSynth = tuple(tab)
         else:
             tupleSynth = tuple(id_synt)
-        sql = config.VALIDATE_OBS
+        print id_synt
+        sql = """UPDATE bdn.synthese
+                 SET valide = TRUE
+                 WHERE id_synthese IN %s;"""
         param = [tupleSynth]
-        db.cur.execute(sql,param) 
+        db.cur.execute(sql,param)       
+        sql = """ UPDATE bdn."""+protocole+""" 
+               SET valide = TRUE
+               WHERE id_synthese IN %s;"""
+        db.cur.execute(sql, param)
+        
         db.conn.commit()
     db.closeAll()
     return json.dumps({'success':True, 'id_synthese':id_synt}), 200, {'ContentType':'application/json'}
