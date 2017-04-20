@@ -33,9 +33,14 @@ def indexValidation():
 def deleteRow(id_synt):
     db = getConnexion()
     id_synt = str(id_synt)
+    #SUPPRESSION DANS LA SYNTHESE
     sql = """DELETE FROM """+ config.OBS_TABLE +""" WHERE """+config.ID_OBSERVATION+""" = %s; """
     param = [id_synt]
-    db.cur.execute(sql, param) 
+    db.cur.execute(sql, param)
+    #SUPPRESSION DANS LA TABLE PROTOCOLE
+    # sql = """DELETE FROM """+ config.OBS_TABLE +""" WHERE """+config.ID_OBSERVATION+""" = %s; """
+    # param = [id_synt]
+    # db.cur.execute(sql, param) 
     db.conn.commit()
     db.closeAll()
     return json.dumps({'success':True, 'id_synthese':id_synt}), 200, {'ContentType':'application/json'}
@@ -43,7 +48,6 @@ def deleteRow(id_synt):
 
 @validation.route('/validate', methods=['GET', 'POST'])
 def validate():
-    print "OHHHH"
     db = getConnexion()
     #id_synt = str(id_synt)
     tab = list()
@@ -56,16 +60,18 @@ def validate():
             tupleSynth = tuple(tab)
         else:
             tupleSynth = tuple(id_synt)
-        print id_synt
-        sql = """UPDATE bdn.synthese
+
+        #VALIDATION DANS LA SYNTHESE
+        sql = """UPDATE """+config.OBS_TABLE+"""
                  SET valide = TRUE
                  WHERE id_synthese IN %s;"""
         param = [tupleSynth]
-        db.cur.execute(sql,param)       
-        sql = """ UPDATE bdn."""+protocole+""" 
-               SET valide = TRUE
-               WHERE id_synthese IN %s;"""
-        db.cur.execute(sql, param)
+        db.cur.execute(sql,param)  
+        #VALIDATION DANS LA TABLE PROTOCOLE     
+        # sql = """ UPDATE bdn."""+protocole+""" 
+        #        SET valide = TRUE
+        #        WHERE id_synthese IN %s;"""
+        # db.cur.execute(sql, param)
         
         db.conn.commit()
     db.closeAll()
